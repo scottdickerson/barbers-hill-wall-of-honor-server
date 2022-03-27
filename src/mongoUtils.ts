@@ -1,5 +1,5 @@
 import mongoDB, { MongoClient, ObjectId, GridFSBucket } from "mongodb";
-import { IChampion } from "./types";
+import { IHonoree } from "./types";
 import { omit } from "lodash";
 
 export const databaseName = process.env.TEST_DB || "barbers-hill";
@@ -7,7 +7,7 @@ export const databaseName = process.env.TEST_DB || "barbers-hill";
 export async function connectToDB() {
   await client.connect();
   const database = client.db(databaseName);
-  championsDatabaseCollection = database.collection("wall-of-champions");
+  honoreesDatabaseCollection = database.collection("wall-of-honor");
   console.log(
     `connected to the barbers hill mongo database ${databaseName} here: ${
       process.env.MONGO_HOSTNAME || "mongodb://127.0.0.1:27017"
@@ -25,42 +25,42 @@ export const uri = process.env.MONGO_HOSTNAME
     }/`;
 
 const client = new MongoClient(uri);
-let championsDatabaseCollection: mongoDB.Collection;
+let honoreesDatabaseCollection: mongoDB.Collection;
 let imagesBucket: mongoDB.GridFSBucket;
 let imagesDatabaseCollection: mongoDB.Collection;
 
-export const IMAGES_BUCKET_NAME = "woc-images";
+export const IMAGES_BUCKET_NAME = "wall-of-honor-images";
 
 export const disconnectFromDB = async () => {
   await client.close();
 };
 
-export const findChampionMetadataInMongo = (id: string) => {
-  return championsDatabaseCollection.findOne({
+export const findHonoreeMetadataInMongo = (id: string) => {
+  return honoreesDatabaseCollection.findOne({
     _id: new ObjectId(id),
-  }) as Promise<IChampion>;
+  }) as Promise<IHonoree>;
 };
 
-export const findChampionsMetadataInMongo = async () => {
+export const findHonoreesMetadataInMongo = async () => {
   return (
-    ((await championsDatabaseCollection?.find({})?.toArray())?.sort(
+    ((await honoreesDatabaseCollection?.find({})?.toArray())?.sort(
       ({ year: year1 }, { year: year2 }) => year1 - year2 // sort it by year
-    ) as IChampion[]) || []
+    ) as IHonoree[]) || []
   );
 };
 
-export const updateChampionInMongo = async (
-  championId: string,
-  champion: IChampion,
+export const updateHonoreeInMongo = async (
+  honoreeId: string,
+  honoree: IHonoree,
   oldImageFileName: string
 ) => {
-  await championsDatabaseCollection.replaceOne(
-    { _id: new ObjectId(championId) },
+  await honoreesDatabaseCollection.replaceOne(
+    { _id: new ObjectId(honoreeId) },
     {
-      ...omit(champion, "_id", "oldImageFileName"),
+      ...omit(honoree, "_id", "oldImageFileName"),
     }
   );
-  if (champion.fileName !== oldImageFileName) {
+  if (honoree.fileName !== oldImageFileName) {
     console.log("deleting original image", oldImageFileName);
     const originalImageToDelete = await findImageFileInGridFS(oldImageFileName);
     if (originalImageToDelete) {
@@ -69,8 +69,8 @@ export const updateChampionInMongo = async (
   }
 };
 
-export const createChampionInMongo = (champion: IChampion) => {
-  return championsDatabaseCollection.insertOne(champion);
+export const createHonoreeInMongo = (honoree: IHonoree) => {
+  return honoreesDatabaseCollection.insertOne(honoree);
 };
 
 const findImageFileInGridFS = (fileName: string) => {
@@ -80,22 +80,20 @@ const findImageFileInGridFS = (fileName: string) => {
   });
 };
 
-export const deleteChampionInMongo = async (id: string): Promise<boolean> => {
-  let championDeleted = false;
-  const uniqueChampionObjectId = {
+export const deleteHonoreeInMongo = async (id: string): Promise<boolean> => {
+  let honoreeDeleted = false;
+  const uniqueHonoreeObjectId = {
     _id: new ObjectId(id),
   };
-  const championToDelete = (await championsDatabaseCollection.findOne(
-    uniqueChampionObjectId
-  )) as IChampion;
-  console.log("champion filename to delete", championToDelete.fileName);
-  const deletedInfo = await championsDatabaseCollection.deleteOne(
-    uniqueChampionObjectId
+  const honoreeToDelete = (await honoreesDatabaseCollection.findOne(
+    uniqueHonoreeObjectId
+  )) as IHonoree;
+  console.log("honoree filename to delete", honoreeToDelete.fileName);
+  const deletedInfo = await honoreesDatabaseCollection.deleteOne(
+    uniqueHonoreeObjectId
   );
   if (deletedInfo.deletedCount > 0) {
-    const imageToDelete = await findImageFileInGridFS(
-      championToDelete.fileName
-    );
+    const imageToDelete = await findImageFileInGridFS(honoreeToDelete.fileName);
     console.log("image to delete", imageToDelete);
     if (imageToDelete) {
       await imagesBucket.delete(imageToDelete._id);
@@ -103,7 +101,7 @@ export const deleteChampionInMongo = async (id: string): Promise<boolean> => {
   } else {
     console.warn("warning I could not find the image file to delete");
   }
-  return championDeleted;
+  return honoreeDeleted;
 };
 
 export const getImageStreamFromMongo = async (imageFileName: string) => {
@@ -116,13 +114,13 @@ export const getImageStreamFromMongo = async (imageFileName: string) => {
   return readableImage;
 };
 
-export const findChampions = async (): Promise<IChampion[]> => {
+export const findHonorees = async (): Promise<IHonoree[]> => {
   try {
-    const champions = await findChampionsMetadataInMongo();
-    // console.log("listing champions", champions);
-    return champions;
+    const honorees = await findHonoreesMetadataInMongo();
+    // console.log("listing honorees", honorees);
+    return honorees;
   } catch (error) {
-    console.error("couldn't find champions");
+    console.error("couldn't find honorees");
   }
-  throw new Error("couldn't query database champions");
+  throw new Error("couldn't query database honorees");
 };

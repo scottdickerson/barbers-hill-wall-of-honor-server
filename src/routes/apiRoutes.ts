@@ -1,25 +1,25 @@
 import express, { NextFunction, Request, Response } from "express";
 import { parseForm, uploadFiles } from "../multerUtils";
 import {
-  findChampions,
-  deleteChampionInMongo,
+  findHonorees,
+  deleteHonoreeInMongo,
   getImageStreamFromMongo,
 } from "../mongoUtils";
 
 const router = express.Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  // send back the champions
+  // send back the honorees
   // console.log("api get route");
-  res.json(await findChampions());
+  res.json(await findHonorees());
 });
 
-// load champion image
+// load honoree image
 
-// create champion
+// create honoree
 router.post("/", uploadFiles, parseForm);
 
-// update champion
+// update honoree
 router.post("/:id", (req: Request, res: Response, next: NextFunction) => {
   parseForm(req, res, next);
 });
@@ -28,9 +28,9 @@ router.delete(
   "/:id",
   async (req: Request, res: Response, next: NextFunction) => {
     const id = req?.params?.id;
-    console.log("deleting champion", id);
-    const championDeleted = await deleteChampionInMongo(id);
-    if (championDeleted) {
+    console.log("deleting honoree", id);
+    const honoreeDeleted = await deleteHonoreeInMongo(id);
+    if (honoreeDeleted) {
       res.sendStatus(200);
     } else {
       res.sendStatus(404);

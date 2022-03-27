@@ -1,11 +1,11 @@
 import {
-  updateChampionInMongo,
-  createChampionInMongo,
+  updateHonoreeInMongo,
+  createHonoreeInMongo,
   uri,
   databaseName,
   IMAGES_BUCKET_NAME,
 } from "./mongoUtils";
-import { IChampion } from "./types";
+import { IHonoree } from "./types";
 import { Request, Response, NextFunction } from "express";
 import { ObjectId } from "mongodb";
 import multer from "multer";
@@ -22,7 +22,7 @@ var storage = new GridFsStorage({
   },
 });
 
-export const uploadFiles = multer({ storage: storage }).single("imageFile");
+export const uploadFiles = multer({ storage: storage }).array("imageFile");
 
 export const parseForm = async (
   req: Request,
@@ -31,37 +31,44 @@ export const parseForm = async (
 ) => {
   try {
     console.log("parsing form!");
-    console.log(req.file, req.body);
-    const file = req.file;
+    console.log(req.files, req.body);
+    const files = req.files;
     const params = req.body;
-    const fileName = file?.filename;
-    const championId = req.params?.id;
-    const isUpdate = Boolean(championId);
-    console.log("Is this an update? ", isUpdate); // passed as a param if editing, first check the edit case, otherwise it's a new file
-    const oldImageFileName = params?.oldImageFileName as string;
-    const newChampion: IChampion = {
+    const imageFiles = Object.values(files || {})?.map((file, index) => ({
+      name: file?.filename,
+      caption: req.body.caption[index],
+    }));
+    const sports = (req.body.sportName as Array<string>)?.map(
+      (sportName, index) => ({
+        name: sportName,
+        description: req.body.sportDescription[index],
+      })
+    );
+    const honoreeId = req.params?.id;
+    const isUpdate = Boolean(honoreeId);
+    const newHonoree: IHonoree = {
       id: new ObjectId(),
-      sport: params.sport as string,
-      year: parseInt(params.year as string, 10),
-      description: params.description as string,
-      award: params.award as string,
-      fileName:
-        fileName !== "invalid-name" && fileName !== "null" && fileName
-          ? fileName
-          : oldImageFileName,
+      name: params.name as string,
+      inductionYear: parseInt(params.inductionYear as string, 10),
+      inMemoriam: params.inMemoriam === "on",
+      specialRecognition: params.specialRecognition === "on",
+      startYear: parseInt(params.startYear as string, 10),
+      endYear: parseInt(params.endYear as string, 10),
+      imageFiles,
+      sports,
     };
 
     try {
       if (isUpdate) {
-        console.log("updating existing champion", JSON.stringify(newChampion));
-        await updateChampionInMongo(championId, newChampion, oldImageFileName);
+        console.log("updating existing honoree", JSON.stringify(newHonoree));
+        await updateHonoreeInMongo(honoreeId, newHonoree, ""); // TODO: fix update case
       } else {
-        console.log("uploading new champion", JSON.stringify(newChampion));
-        await createChampionInMongo(newChampion);
+        console.log("uploading new honoree", JSON.stringify(newHonoree));
+        await createHonoreeInMongo(newHonoree);
       }
     } catch (error) {
       console.error(error);
-      console.log("error creating/updating champion");
+      console.log("error creating/updating honoree");
       res.sendStatus(500);
     }
     res.setHeader(

@@ -1,0 +1,92 @@
+head 
+    script(src="/scripts/uploadPage.js") 
+body
+    h1 Upload new honoree
+    form#uploadForm(enctype='multipart/form-data' method='POST' action='/api' style='\
+    display: flex;\
+    flex-flow: column;\
+    gap: 0.5rem;\
+    justify-content: space-between;\
+    width: 300px;\
+    ')
+        label#nameLabel Name
+        input#name(aria-labelledby='nameLabel' type='string' name='name')
+        label#inductionYearLabel Induction year
+        input#inductionYear(aria-labelledby='inductionYearLabel' type='number' name='inductionYear')
+        label#specialRecognitionLabel Special recognition
+        input#specialRecognition(aria-labelledby='specialRecognitionLabel' type='checkbox' name='specialRecognition')
+        label#inMemoriamLabel In memoriam
+        input#inMemoriam(aria-labelledby='inMemoriamLabel' type='checkbox' name='inMemoriam')
+        label#startYearLabel Start year
+        input#startYear(aria-labelledby='startYearLabel' type='number' name='startYear')
+        label#endYearLabel End year
+        input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear')    
+        div(style='\
+            display: flex;\
+            flex-flow: column;\
+            gap: 1rem;\
+            white-space: nowrap;\
+            width: 1000px;\
+        ')  
+            h2 Sports
+            h3 Sport 1
+            div(style='\
+                display: flex;\
+                gap: 1rem;\
+                white-space: nowrap;\
+                align-items: center;\
+            ')  
+                
+                label#sportNameLabel1 Sport 1 name
+                input#sportName1(aria-labelledby='sportNameLabel1' type='text' name='sportName')
+                label#sportDescriptionLabel1 Sport 1 description
+                textarea#sportDescription1(aria-labelledby='sportDescriptionLabel1' type='text' name='sportDescription' rows="5" columns="30" style='width:800px;')
+            hr(style='width: 800px;')
+            h3 Sport 2
+            div(style='\
+                display: flex;\
+                gap: 1rem;\
+                white-space: nowrap;\
+                align-items: center;\
+            ')      
+                label#sportNameLabel2 Sport 2 name
+                input#sport2(aria-labelledby='sportNameLabel2' type='text' name='sportName')
+                label#sportDescriptionLabel2 Sport 2 description
+                textarea#sportDescription2(aria-labelledby='sportDescriptionLabel2' type='text' name='sportDescription' rows="5" columns="30" style='width:800px;')
+        hr(style='width: 800px;')
+        div(style='\
+            display: flex;\
+            flex-flow: column;\
+            gap: 1rem;\
+            white-space: nowrap;\
+            width: 800px;\
+        ')  
+            h2 Images
+            h3 Image 1
+            div(style='\
+                display: flex;\
+                gap: 1rem;\
+                white-space: nowrap;\
+                align-items: center;\
+            ')  
+                
+                input#fileUploader1(name='imageFile' type='file')
+                label#captionLabel Caption
+                input#caption(aria-labelledby='captionLabel' type='text' name='caption' style='width:400px')
+            
+            h3 Image 2
+            div(style='\
+                display: flex;\
+                gap: 1rem;\
+                white-space: nowrap;\
+                align-items: center;\
+            ')  
+                
+                input#fileUploader2(name='imageFile' type='file')
+                label#captionLabel Caption
+                input#caption(aria-labelledby='captionLabel' type='text' name='caption' style='width:400px')
+        #errorMessage(style='color: red')
+    div
+    h2 Actions
+    button#submitButton(onclick="submitForm()") Upload
+    button#list(onclick="listHonorees()") List existing honorees

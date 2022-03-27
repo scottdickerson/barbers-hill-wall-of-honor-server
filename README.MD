@@ -1,4 +1,4 @@
-# Admin server for Wall of Champions
+# Admin server for Wall of Honorees
 
 ## Running the app locally
 
@@ -66,4 +66,23 @@ mongorestore
 
 ## TODOS
 
-- Delete image if you edit a champion and replace the image
+- Show the multiple images and captions in the browse existing Honorees
+- Add sport/description options to form
+
+- Add dynamic add remove sport and image from form.
+- Delete image if you edit a honoree and replace the image
+- How to handle editing each image!?
+
+## Design of mongo document
+
+name: string;
+inductionYear: number
+specialRecognition: boolean
+inMemoriam: boolean
+startYear: number
+endYear: number
+sports: [{name: string; description: string}]
+imageFiles: [{name: string; caption: string}]
+Each additional image will add a new form field with file input id different but name `imageName` and new caption field for the form to parse.
+Multer parse will put all the images into the database
+Filename and caption will be stored in array of objects inside the main document, parsed individually, assume captions come in in the same order as the file array

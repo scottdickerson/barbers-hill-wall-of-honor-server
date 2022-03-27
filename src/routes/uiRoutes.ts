@@ -2,23 +2,23 @@ import express, { Request, Response } from "express";
 const router = express.Router();
 import pug from "pug";
 import path from "path";
-import { findChampionMetadataInMongo, findChampions } from "../mongoUtils";
+import { findHonoreeMetadataInMongo, findHonorees } from "../mongoUtils";
 
 export const pugPagesHome = path.join(__dirname, "..", "..", "src", "pages");
 
 router.get(
-  "/editChampion.html/:championId",
+  "/editHonoree.html/:honoreeId",
   async (req: Request, res: Response) => {
-    const id = req.params.championId;
-    console.log("champion id to load", id);
+    const id = req.params.honoreeId;
+    console.log("honoree id to load", id);
 
     try {
-      const champion = await findChampionMetadataInMongo(id);
-      console.log("found champion", champion);
-      if (champion) {
+      const honoree = await findHonoreeMetadataInMongo(id);
+      console.log("found honoree", honoree);
+      if (honoree) {
         res.send(
-          pug.renderFile(path.join(pugPagesHome, "editChampion.pug"), {
-            ...champion,
+          pug.renderFile(path.join(pugPagesHome, "editHonoree.pug"), {
+            ...honoree,
             // heroku: process.env.ENVIRONMENT === "heroku",
           })
         );
@@ -32,8 +32,8 @@ router.get(
   }
 );
 
-router.get("/uploadChampion.html", (req: Request, res: Response) => {
-  res.send(pug.renderFile(path.join(pugPagesHome, "uploadChampion.pug")));
+router.get("/uploadHonoree.html", (req: Request, res: Response) => {
+  res.send(pug.renderFile(path.join(pugPagesHome, "uploadHonoree.pug")));
 });
 
 router.get("/mainNavigation.html", (req: Request, res: Response) => {
@@ -44,12 +44,13 @@ router.get("/mainNavigation.html", (req: Request, res: Response) => {
   );
 });
 
-router.get("/listChampions.html", async (req: Request, res: Response) => {
+router.get("/listHonorees.html", async (req: Request, res: Response) => {
   try {
-    const champions = await findChampions();
+    const honorees = await findHonorees();
+    console.log("honorees", honorees);
     res.send(
-      pug.renderFile(path.join(pugPagesHome, "listChampions.pug"), {
-        champions,
+      pug.renderFile(path.join(pugPagesHome, "listHonorees.pug"), {
+        honorees,
         // heroku: process.env.ENVIRONMENT === "heroku",
       })
     );

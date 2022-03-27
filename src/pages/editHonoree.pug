@@ -1,13 +1,13 @@
 head 
     script(src="/scripts/uploadPage.js") 
 body
-    h1 Edit Champion
+    h1 Edit Honoree
     div(style='width: 300px; padding: 1rem 0rem; display: flex; justify-content: space-between;')
         button#submitButton(onclick="submitForm(true)" style=`\
         background-color:blue;\
         color:white;\
         `) Save changes
-        button#list(onclick="listChampions()") List existing champions
+        button#list(onclick="listHonorees()") List existing honorees
     form#uploadForm(enctype='multipart/form-data' method='POST' action="/api/"+_id style='\
     display: flex;\
     flex-flow: column;\

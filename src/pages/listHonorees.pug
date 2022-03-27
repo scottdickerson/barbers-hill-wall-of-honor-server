@@ -1,0 +1,60 @@
+head 
+    script(src="/scripts/uploadPage.js") 
+body
+    h1 Current Honorees
+    if !heroku
+        button#add(onclick="addHonoree()") Add new honoree
+    each honoree in honorees 
+        div(style='\
+        display: flex;\
+        flex-flow: row;\
+        align-items: center;\
+        ')
+            div(style='\
+            display: flex;\
+            flex-flow: column;\
+            align-items: flex-start;\
+            ')
+                h2 Name: #{honoree.name}
+                 div(style='\
+                    display: flex;\
+                    padding: 1rem 0rem;\
+                    ')
+                    button(onclick="editHonoree('"+honoree._id+"')" style='\
+                    height: 20px;\
+                    width: 150px;\
+                    marginLeft: 1rem;\
+                    ') Edit Honoree
+                    if !heroku
+                        button(onclick="deleteHonoree('"+honoree._id+"')" style='\
+                        height: 20px;\
+                        width: 150px;\
+                        marginLeft: 1rem;\
+                        ') Delete Honoree
+                p Induction year: #{honoree.inductionYear}
+                p In memoriam: #{honoree.inMemoriam}
+                p Special Recognition: #{honoree.specialRecognition}
+                p Start year: #{honoree.startYear}
+                p End year: #{honoree.endYear}
+            
+                h2 Sports 
+                each sport, index in honoree.sports
+                    h3 Sport #{index + 1}
+                    p Sport name: #{sport.name}
+                    p Sport description: #{sport.description}
+                    hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
+                h2 Images
+                each imageFile, index in honoree.imageFiles
+                    h3 Image #{index + 1}
+                    span Caption: #{imageFile.caption}
+                    img(src="/api/"+imageFile.name style="width:700px;") 
+                    hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
+           
+        hr(style='\
+        width: 100%;\
+        height: 3px;\
+        background-color: black;\
+        margin-Top: 1rem;\
+        ')
+    
+

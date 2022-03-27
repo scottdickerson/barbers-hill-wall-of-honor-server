@@ -8,30 +8,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
 const submitForm = (edit) => {
   const errorMessageSpan = document.getElementById("errorMessage");
-  const sportValue = uploadForm.elements.sport.value;
-  const awardValue = uploadForm.elements.award.value;
-  const yearValue = uploadForm.elements.year.value;
-  const descriptionValue = uploadForm.elements.description.value;
+  const nameValue = uploadForm.elements.name.value;
+  const inductionYear = uploadForm.elements.inductionYear.value;
+  const startYear = uploadForm.elements.startYear.value;
+  const endYear = uploadForm.elements.endYear.value;
   const imageFileCount = uploadForm.elements.imageFile?.files?.length;
   let errorMessage;
   if (
-    sportValue === "" ||
-    awardValue === "" ||
-    yearValue === "" ||
-    descriptionValue === "" ||
+    nameValue === "" ||
+    inductionYear === "" ||
+    startYear === "" ||
+    endYear === "" ||
     (!edit && imageFileCount === 0)
   ) {
     errorMessage = "All form elements are required";
   }
-  const fileSize = fileUploader.files[0]?.size;
+  const fileSize = fileUploader1.files[0]?.size;
   console.log("File size", fileSize);
   if (fileSize > MAX_FILE_SIZE_IN_MB * 1024 * 1024) {
     errorMessage = `File cannot be larger than ${MAX_FILE_SIZE_IN_MB}MB`;
   }
-  console.log(sportValue);
-  console.log(awardValue);
-  console.log(yearValue);
-  console.log(descriptionValue);
+  console.log(nameValue);
+  console.log(inductionYear);
+  console.log(startYear);
+  console.log(endYear);
   console.log(imageFileCount);
   if (!errorMessage) {
     uploadForm.submit();
@@ -40,19 +40,19 @@ const submitForm = (edit) => {
   }
 };
 
-const addChampion = () => {
-  window.location = "/ui/uploadChampion.html";
+const addHonoree = () => {
+  window.location = "/ui/uploadHonoree.html";
 };
 
-const listChampions = () => {
-  window.location = "/ui/listChampions.html";
+const listHonorees = () => {
+  window.location = "/ui/listHonorees.html";
 };
 
-const editChampion = (id) => {
-  window.location = `/ui/editChampion.html/${id}`;
+const editHonoree = (id) => {
+  window.location = `/ui/editHonoree.html/${id}`;
 };
 
-const deleteChampion = (id) => {
+const deleteHonoree = (id) => {
   fetch(`/api/${id}`, { method: "DELETE" }).then(() => {
     location.reload();
   });

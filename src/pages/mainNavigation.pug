@@ -1,9 +1,9 @@
 head 
     script(src="/scripts/uploadPage.js") 
 body
-    h1 Barbers Hill Wall of Champions Administration
+    h1 Barbers Hill Wall of Honorees Administration
     div
     h2 Select an Action
     if !heroku 
-        button#add(onclick="addChampion()") Add new champion
-    button#list(onclick="listChampions()") List existing champions
+        button#add(onclick="addHonoree()") Add new honoree
+    button#list(onclick="listHonorees()") List existing honorees

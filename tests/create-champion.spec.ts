@@ -11,10 +11,10 @@ const CHAMPION = {
   description: "testDescription",
 };
 
-const addChampion = async (page) => {
-  // Create 1st champion.
+const addHonoree = async (page) => {
+  // Create 1st honoree.
   await page.locator("#add").click();
-  await expect(page).toHaveURL("http://127.0.0.1:3000/ui/uploadChampion.html");
+  await expect(page).toHaveURL("http://127.0.0.1:3000/ui/uploadHonoree.html");
 
   await page.fill("#sport", CHAMPION.sport);
   await page.fill("#award", CHAMPION.award);
@@ -29,18 +29,18 @@ const addChampion = async (page) => {
   await expect(page).toHaveURL("http://127.0.0.1:3000/ui/mainNavigation.html");
 };
 
-const deleteChampion = async (page) => {
-  await page.goto("http://127.0.0.1:3000/ui/listChampions.html");
+const deleteHonoree = async (page) => {
+  await page.goto("http://127.0.0.1:3000/ui/listHonorees.html");
   // Locate elements, this locator points to a list.
-  const images = await page.locator("text=Delete champion").nth(1);
+  const images = await page.locator("text=Delete honoree").nth(1);
   await images.click();
 };
 
-test.describe("CRUD champions", () => {
-  test("add/delete bulk champions", async ({ page }) => {
+test.describe("CRUD honorees", () => {
+  test("add/delete bulk honorees", async ({ page }) => {
     for (let i = 0; i < 22; i++) {
-      await addChampion(page);
-      await deleteChampion(page);
+      await addHonoree(page);
+      await deleteHonoree(page);
     }
   });
 });

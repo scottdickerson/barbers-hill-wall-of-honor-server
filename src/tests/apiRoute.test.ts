@@ -8,7 +8,7 @@ describe("api routes testing", () => {
     request = supertest(app);
   });
   it("get images empty", async () => {
-    const result = await request.get("/api/champions");
+    const result = await request.get("/api/honorees");
     expect(result.body).toEqual([]);
   });
   afterAll(() => {

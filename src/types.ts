@@ -1,12 +1,12 @@
 import { Document, ObjectId, WithId } from "mongodb";
-export interface IChampion extends Partial<WithId<Document>> {
-  sport: string;
-  award: string;
-  year: number;
-
-  description: string;
-
-  fileName: string;
-
+export interface IHonoree extends Partial<WithId<Document>> {
+  name: string;
+  inductionYear: number;
+  specialRecognition: boolean;
+  inMemoriam: boolean;
+  startYear: number;
+  endYear: number;
+  sports: Array<{ name: string; description: string }>;
+  imageFiles: Array<{ name: string; caption: string }>;
   id: ObjectId;
 }
