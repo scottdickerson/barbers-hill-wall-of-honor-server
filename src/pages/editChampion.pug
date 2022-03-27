@@ -1,0 +1,33 @@
+head 
+    script(src="/scripts/uploadPage.js") 
+body
+    h1 Edit Champion
+    div(style='width: 300px; padding: 1rem 0rem; display: flex; justify-content: space-between;')
+        button#submitButton(onclick="submitForm(true)" style=`\
+        background-color:blue;\
+        color:white;\
+        `) Save changes
+        button#list(onclick="listChampions()") List existing champions
+    form#uploadForm(enctype='multipart/form-data' method='POST' action="/api/"+_id style='\
+    display: flex;\
+    flex-flow: column;\
+    justify-content: space-between;\
+    height: 300px;\
+    width: 300px;\
+    ')
+        label#sport Sport
+        input#sport(aria-labelledby='sport' type='text' name='sport', value=sport)
+        label#award Award
+        input#award(aria-labelledby='award' type='text' name='award',value=award)
+        label#yearLabel Year
+        input#year(placeholder='Enter year of induction' aria-labelledby='yearLabel' type='number' name='year' value=year style='width: 400px')
+        if !heroku 
+            input#fileUploader(name='imageFile' type='file')
+        label#descriptionLabel Description
+        textarea#description(aria-labelledby='descriptionLabel' type='text' name='description'  rows='5' cols='35')=description
+        input#oldImageFileName(name="oldImageFileName" type="hidden" value=fileName)
+        span#errorMessage(style='color: red')
+    div(style='padding: 1rem; display: flex; flex-flow: column')
+        span#imageFilename Existing Image #{fileName}
+        img#existingImage(style='width: 700px' src="/api/"+fileName)  
+    

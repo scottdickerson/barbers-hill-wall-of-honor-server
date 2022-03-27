@@ -1,0 +1,8 @@
+/dist/**/**.js
+/node_modules
+./mongosh*
+*.DS_Store
+.env
+test-results/
+playwright-report/
+tests/images/*
