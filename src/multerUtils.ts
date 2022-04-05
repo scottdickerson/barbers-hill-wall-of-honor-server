@@ -36,14 +36,18 @@ export const parseForm = async (
     const params = req.body;
     const imageFiles = Object.values(files || {})?.map((file, index) => ({
       name: file?.filename,
-      caption: req.body.caption[index],
+      description: req.body.imageDescription[index],
     }));
-    const sports = (req.body.sportName as Array<string>)?.map(
-      (sportName, index) => ({
-        name: sportName,
-        description: req.body.sportDescription[index],
-      })
-    );
+    const sports = (
+      Array.isArray(req.body.sportName)
+        ? (req.body.sportName as Array<string>)
+        : ([req.body.sportName] as Array<string>)
+    )?.map((sportName, index) => ({
+      name: sportName,
+      description: !Array.isArray(req.body.sportDescription)
+        ? req.body.sportDescription
+        : req.body.sportDescription[index],
+    }));
     const honoreeId = req.params?.id;
     const isUpdate = Boolean(honoreeId);
     const newHonoree: IHonoree = {
@@ -80,5 +84,6 @@ export const parseForm = async (
   } catch (error) {
     console.log("error parsing the form or uploading the image file");
     console.error(error);
+    res.sendStatus(500);
   }
 };

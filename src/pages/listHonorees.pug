@@ -32,8 +32,10 @@ body
                         marginLeft: 1rem;\
                         ') Delete Honoree
                 p Induction year: #{honoree.inductionYear}
-                p In memoriam: #{honoree.inMemoriam}
+                
                 p Special Recognition: #{honoree.specialRecognition}
+                p In memoriam: #{honoree.inMemoriam}
+                
                 p Start year: #{honoree.startYear}
                 p End year: #{honoree.endYear}
             
@@ -46,7 +48,7 @@ body
                 h2 Images
                 each imageFile, index in honoree.imageFiles
                     h3 Image #{index + 1}
-                    span Caption: #{imageFile.caption}
+                    span Description: #{imageFile.description}
                     img(src="/api/"+imageFile.name style="width:700px;") 
                     hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
            

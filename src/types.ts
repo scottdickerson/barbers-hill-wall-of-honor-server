@@ -7,6 +7,6 @@ export interface IHonoree extends Partial<WithId<Document>> {
   startYear: number;
   endYear: number;
   sports: Array<{ name: string; description: string }>;
-  imageFiles: Array<{ name: string; caption: string }>;
+  imageFiles: Array<{ name: string; description: string }>;
   id: ObjectId;
 }

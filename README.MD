@@ -66,12 +66,9 @@ mongorestore
 
 ## TODOS
 
-- Show the multiple images and captions in the browse existing Honorees
-- Add sport/description options to form
-
-- Add dynamic add remove sport and image from form.
-- Delete image if you edit a honoree and replace the image
-- How to handle editing each image!?
+- Delete image if you edit a honoree and remove the image
+- Allow editing the description but not the image
+- Is the editing of an image for WoC actually broken on the heroku server?
 
 ## Design of mongo document
 
@@ -82,7 +79,9 @@ inMemoriam: boolean
 startYear: number
 endYear: number
 sports: [{name: string; description: string}]
-imageFiles: [{name: string; caption: string}]
-Each additional image will add a new form field with file input id different but name `imageName` and new caption field for the form to parse.
+imageFiles: [{name: string; description: string}]
+
+Images:
+Each additional image will add a new form field with file input id different but name `imageName` and new imageDescription field for the form to parse.
 Multer parse will put all the images into the database
-Filename and caption will be stored in array of objects inside the main document, parsed individually, assume captions come in in the same order as the file array
+Filename and descriptions will be stored in array of objects inside the main document, parsed individually, assume descriptionss come in in the same order as the file array
