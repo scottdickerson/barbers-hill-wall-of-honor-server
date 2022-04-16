@@ -51,21 +51,38 @@ export const findHonoreesMetadataInMongo = async () => {
 
 export const updateHonoreeInMongo = async (
   honoreeId: string,
-  honoree: IHonoree,
-  oldImageFileName: string
+  honoree: IHonoree
 ) => {
+  const existingHonoree = (await honoreesDatabaseCollection.findOne({
+    _id: new ObjectId(honoreeId),
+  })) as IHonoree;
   await honoreesDatabaseCollection.replaceOne(
     { _id: new ObjectId(honoreeId) },
     {
       ...omit(honoree, "_id", "oldImageFileName"),
     }
   );
-  if (honoree.fileName !== oldImageFileName) {
-    console.log("deleting original image", oldImageFileName);
-    const originalImageToDelete = await findImageFileInGridFS(oldImageFileName);
-    if (originalImageToDelete) {
-      await imagesBucket.delete(originalImageToDelete._id);
-    }
+  const existingHonoreeImageFileNames = existingHonoree.imageFiles.map(
+    (imageFile) => imageFile.name
+  );
+  const newHonoreeImageFileNames = honoree.imageFiles.map(
+    (imageFile) => imageFile.name
+  );
+  await Promise.all(
+    existingHonoreeImageFileNames.map(async (oldImageFileName) => {
+      // if an image has been removed from the newHonoree then delete it
+      if (!newHonoreeImageFileNames.includes(oldImageFileName)) {
+        console.log("deleting original image", oldImageFileName);
+        return deleteImageByFileName(oldImageFileName);
+      }
+    })
+  );
+};
+
+export const deleteImageByFileName = async (oldImageFileName: string) => {
+  const originalImageToDelete = await findImageFileInGridFS(oldImageFileName);
+  if (originalImageToDelete) {
+    await imagesBucket.delete(originalImageToDelete._id);
   }
 };
 
@@ -81,6 +98,7 @@ const findImageFileInGridFS = (fileName: string) => {
 };
 
 export const deleteHonoreeInMongo = async (id: string): Promise<boolean> => {
+  console.log("deleting honoree from db", id);
   let honoreeDeleted = false;
   const uniqueHonoreeObjectId = {
     _id: new ObjectId(id),
@@ -88,18 +106,24 @@ export const deleteHonoreeInMongo = async (id: string): Promise<boolean> => {
   const honoreeToDelete = (await honoreesDatabaseCollection.findOne(
     uniqueHonoreeObjectId
   )) as IHonoree;
-  console.log("honoree filename to delete", honoreeToDelete.fileName);
+
   const deletedInfo = await honoreesDatabaseCollection.deleteOne(
     uniqueHonoreeObjectId
   );
   if (deletedInfo.deletedCount > 0) {
-    const imageToDelete = await findImageFileInGridFS(honoreeToDelete.fileName);
-    console.log("image to delete", imageToDelete);
-    if (imageToDelete) {
-      await imagesBucket.delete(imageToDelete._id);
-    }
-  } else {
-    console.warn("warning I could not find the image file to delete");
+    honoreeDeleted = true;
+    console.log("honoree images to delete", honoreeToDelete.imageFiles);
+    await Promise.all(
+      honoreeToDelete.imageFiles.map(({ name }) => {
+        try {
+          console.log("deleting file", name);
+          return deleteImageByFileName(name);
+        } catch (error) {
+          console.log("error deleting image", name, error);
+          return Promise.resolve();
+        }
+      })
+    );
   }
   return honoreeDeleted;
 };

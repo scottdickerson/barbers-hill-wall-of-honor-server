@@ -67,8 +67,8 @@ mongorestore
 ## TODOS
 
 - Delete image if you edit a honoree and remove the image
-- Allow editing the description but not the image
 - Is the editing of an image for WoC actually broken on the heroku server?
+- can I combine my multer utilities and mongoUtils
 
 ## Design of mongo document
 
@@ -82,6 +82,7 @@ sports: [{name: string; description: string}]
 imageFiles: [{name: string; description: string}]
 
 Images:
-Each additional image will add a new form field with file input id different but name `imageName` and new imageDescription field for the form to parse.
+Each additional image will add a new form field with file input id different but name `imageName` and new imageDescription field for the form to parse BASED on the same index. i.e.
+the first element of the `imageName` array corresponds to the first element of the `imageDescription` array
 Multer parse will put all the images into the database
 Filename and descriptions will be stored in array of objects inside the main document, parsed individually, assume descriptionss come in in the same order as the file array

@@ -19,7 +19,8 @@ app.use("/ui", uiRouter);
 // setup API routes
 app.use("/api", apiRouter);
 
-app.use("/scripts", (...args) => express.static("src/scripts")(...args));
+app.use("/scripts", (...args) => express.static("dist/scripts")(...args));
+app.use("/images", (...args) => express.static("dist/images")(...args));
 
 app.get("/", (req: Request, res: Response) => {
   res.send(pug.renderFile(path.join(pugPagesHome, "mainNavigation.pug")));

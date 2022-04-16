@@ -116,7 +116,9 @@ const addRow = (type) => {
   newRowDeleteButton.type = "button";
   newRowDeleteButton.innerHTML = `Remove ${type} ${nextNumber}`;
   newRowDeleteButton.setAttribute(`data-${type}-number`, nextNumber);
-  newRowDeleteButton.addEventListener("click", () => removeRow(nextNumber));
+  newRowDeleteButton.addEventListener("click", () =>
+    removeRow(type, nextNumber)
+  );
   newRowDeleteButton.style = "width:200px";
 
   const newRowSeparator = document.createElement("hr");

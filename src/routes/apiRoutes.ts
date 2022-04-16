@@ -20,27 +20,20 @@ router.get("/", async (req: Request, res: Response) => {
 router.post("/", uploadFiles, parseForm);
 
 // update honoree
-router.post(
-  "/:id",
-  uploadFiles,
-  (req: Request, res: Response, next: NextFunction) => {
-    parseForm(req, res, next);
-  }
-);
+router.post("/:id", uploadFiles, (req: Request, res: Response) => {
+  parseForm(req, res);
+});
 
-router.delete(
-  "/:id",
-  async (req: Request, res: Response, next: NextFunction) => {
-    const id = req?.params?.id;
-    console.log("deleting honoree", id);
-    const honoreeDeleted = await deleteHonoreeInMongo(id);
-    if (honoreeDeleted) {
-      res.sendStatus(200);
-    } else {
-      res.sendStatus(404);
-    }
+router.delete("/:id", async (req: Request, res: Response) => {
+  const id = req?.params?.id;
+  console.log("deleting honoree", id);
+  const honoreeDeleted = await deleteHonoreeInMongo(id);
+  if (honoreeDeleted) {
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(404);
   }
-);
+});
 
 // This is used to send images back to the <img src tags in our documents
 router.get("/:imageFileName", async (req: Request, res: Response) => {
@@ -54,6 +47,7 @@ router.get("/:imageFileName", async (req: Request, res: Response) => {
     } catch (error) {
       console.error(error);
       console.log("error returning image", fileName);
+      res.send(400);
     }
   } else {
     res.send(400);

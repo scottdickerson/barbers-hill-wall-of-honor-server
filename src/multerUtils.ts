@@ -6,12 +6,12 @@ import {
   IMAGES_BUCKET_NAME,
 } from "./mongoUtils";
 import { IHonoree } from "./types";
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { ObjectId } from "mongodb";
 import multer from "multer";
 const { GridFsStorage } = require("multer-gridfs-storage");
 
-var storage = new GridFsStorage({
+const storage = new GridFsStorage({
   url: uri + databaseName,
   options: { useNewUrlParser: true, useUnifiedTopology: true },
   file: (req: Request, file: { originalname: string }) => {
@@ -22,34 +22,91 @@ var storage = new GridFsStorage({
   },
 });
 
-export const uploadFiles = multer({ storage: storage }).array("imageFile");
+export const uploadFiles = multer({ storage }).array("imageFile");
 
-export const parseForm = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export type ImageFile = {
+  name: string;
+  description: string;
+};
+
+export type Sport = {
+  name: string;
+  description: string;
+};
+
+export const parseSports = (
+  sportName: string | string[],
+  sportDescription: string | string[]
+): Sport[] => {
+  const sports = (
+    Array.isArray(sportName)
+      ? (sportName as Array<string>)
+      : ([sportName] as Array<string>)
+  )?.map((sportName, index) => ({
+    name: sportName,
+    description: !Array.isArray(sportDescription)
+      ? sportDescription
+      : sportDescription[index],
+  }));
+  return sports;
+};
+
+export const parseImageDescription = (
+  imageDescription: string[] | string,
+  index: number
+): string => {
+  return !Array.isArray(imageDescription)
+    ? imageDescription
+    : imageDescription[index];
+};
+
+export const parseImageFiles = (
+  imageName: string[] | string,
+  imageDescription: string[] | string,
+  files?: undefined | Partial<Express.Multer.File>[]
+): ImageFile[] => {
+  // first parse any existing image files
+  const imageFiles = imageName
+    ? (Array.isArray(imageName)
+        ? (imageName as Array<string>)
+        : ([imageName] as Array<string>)
+      )?.map((imageName, index) => ({
+        name: imageName,
+        description: parseImageDescription(imageDescription, index),
+      }))
+    : [];
+  console.log("Existing image files", imageFiles);
+  console.log("passed array of new files", files);
+  // then add images from new image files
+  imageFiles.push(
+    ...(files || []).map((file, index) => {
+      console.log("each new file", file);
+      return {
+        name: file?.filename || "",
+        description: parseImageDescription(
+          imageDescription,
+          imageFiles.length + index // skip the descriptions from the existing image files
+        ),
+      };
+    })
+  );
+  console.log("With new image files", imageFiles);
+  return imageFiles;
+};
+
+export const parseForm = async (req: Request, res: Response) => {
   try {
     console.log("parsing form!");
     console.log(req.files, req.body);
     const files = req.files;
     const params = req.body;
-    const imageFiles = Object.values(files || {})?.map((file, index) => ({
-      name: file?.filename,
-      description: req.body.imageDescription[index],
-    }));
-    const sports = (
-      Array.isArray(req.body.sportName)
-        ? (req.body.sportName as Array<string>)
-        : ([req.body.sportName] as Array<string>)
-    )?.map((sportName, index) => ({
-      name: sportName,
-      description: !Array.isArray(req.body.sportDescription)
-        ? req.body.sportDescription
-        : req.body.sportDescription[index],
-    }));
+    const sports = parseSports(req.body.sportName, req.body.sportDescription);
+    const imageFiles = parseImageFiles(
+      req.body.imageName,
+      req.body.imageDescription,
+      files as Express.Multer.File[]
+    );
     const honoreeId = req.params?.id;
-    const isUpdate = Boolean(honoreeId);
     const newHonoree: IHonoree = {
       id: new ObjectId(),
       name: params.name as string,
@@ -63,9 +120,9 @@ export const parseForm = async (
     };
 
     try {
-      if (isUpdate) {
+      if (honoreeId) {
         console.log("updating existing honoree", JSON.stringify(newHonoree));
-        await updateHonoreeInMongo(honoreeId, newHonoree, ""); // TODO: fix update case
+        await updateHonoreeInMongo(honoreeId, newHonoree);
       } else {
         console.log("uploading new honoree", JSON.stringify(newHonoree));
         await createHonoreeInMongo(newHonoree);

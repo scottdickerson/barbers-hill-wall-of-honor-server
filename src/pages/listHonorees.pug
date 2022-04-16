@@ -15,6 +15,7 @@ body
             flex-flow: column;\
             align-items: flex-start;\
             ')
+                img(src="/images/honoree.png" style="background-color: black; height:200px;") 
                 h2 Name: #{honoree.name}
                  div(style='\
                     display: flex;\
@@ -48,7 +49,8 @@ body
                 h2 Images
                 each imageFile, index in honoree.imageFiles
                     h3 Image #{index + 1}
-                    span Description: #{imageFile.description}
+                    p Name: #{imageFile.name}
+                    p Description: #{imageFile.description}
                     img(src="/api/"+imageFile.name style="width:700px;") 
                     hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
            

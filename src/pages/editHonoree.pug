@@ -67,9 +67,11 @@ body
                     width: 800px;\
                 ')
                     h3 Image #{index + 1}
-                    img(src="/api/"+imageFile.name style="width:700px;") 
-                    span Description:
+                    input(name="imageName" type="hidden" value=imageFile.name)
+                    p Name: #{imageFile.name}
+                    p Description:
                     textarea(name="imageDescription" rows="5" columns="30" style="width:800px") #{imageFile.description}
+                    img(src="/api/"+imageFile.name style="width:700px;") 
                     button(style="width: 200px" onclick="removeRow('image', " + (index + 1) + ")" type="button") Remove Image #{index + 1}
                     hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
             button(onclick="addRow('image')" type="button" style="width: 100px;\
