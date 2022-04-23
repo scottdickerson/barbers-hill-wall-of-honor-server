@@ -42,7 +42,7 @@ heroku config:set ENVIRONMENT=heroku
 ```
 
 Open a browser to this URL for testing
-https://barbers-hill-woc-server.herokuapp.com/
+<https://barbers-hill-honor-server.herokuapp.com/>
 
 ## Bring the remote database locally for actual production performance testing
 
