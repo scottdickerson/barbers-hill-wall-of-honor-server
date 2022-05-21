@@ -39,13 +39,15 @@ body
                 
                 p Start year: #{honoree.startYear}
                 p End year: #{honoree.endYear}
-            
-                h2 Sports 
-                each sport, index in honoree.sports
-                    h3 Sport #{index + 1}
-                    p Sport name: #{sport.name}
-                    p Sport description: #{sport.description}
-                    hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
+                if (honoree.specialRecognition)
+                    p Achievements: #{honoree.achievements}
+                else
+                    h2 Sports 
+                    each sport, index in honoree.sports
+                        h3 Sport #{index + 1}
+                        p Sport name: #{sport.name}
+                        p Sport description: #{sport.description}
+                        hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
                 h2 Images
                 each imageFile, index in honoree.imageFiles
                     h3 Image #{index + 1}

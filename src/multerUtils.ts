@@ -100,7 +100,11 @@ export const parseForm = async (req: Request, res: Response) => {
     console.log(req.files, req.body);
     const files = req.files;
     const params = req.body;
-    const sports = parseSports(req.body.sportName, req.body.sportDescription);
+    const isSpecialRecognition = params.specialRecognition === "on";
+    let sports: Sport[] = [];
+    if (!isSpecialRecognition) {
+      sports = parseSports(req.body.sportName, req.body.sportDescription);
+    }
     const imageFiles = parseImageFiles(
       req.body.imageName,
       req.body.imageDescription,
@@ -112,9 +116,10 @@ export const parseForm = async (req: Request, res: Response) => {
       name: params.name as string,
       inductionYear: parseInt(params.inductionYear as string, 10),
       inMemoriam: params.inMemoriam === "on",
-      specialRecognition: params.specialRecognition === "on",
+      specialRecognition: isSpecialRecognition,
       startYear: parseInt(params.startYear as string, 10),
       endYear: parseInt(params.endYear as string, 10),
+      achievements: params.achievements,
       imageFiles,
       sports,
     };

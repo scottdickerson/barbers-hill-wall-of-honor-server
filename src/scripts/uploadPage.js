@@ -1,19 +1,39 @@
 let uploadForm;
 let sportSection;
 let imagesSection;
+let achievements;
+let specialRecognition;
 
 const MAX_FILE_SIZE_IN_MB = 3;
 
+const hideShowAchievements = (checked) => {
+  if (checked) {
+    achievements.style.display = "block";
+    sportSection.style.display = "none";
+  } else {
+    achievements.style.display = "none";
+    sportSection.style.display = "flex";
+  }
+};
+
 document.addEventListener("DOMContentLoaded", () => {
   uploadForm = document.getElementById("uploadForm");
-  sportSection = document.getElementById("sports");
   imagesSection = document.getElementById("images");
+  sportSection = document.getElementById("sports");
+  achievements = document.getElementById("achievements");
+  specialRecognition = document.getElementById("specialRecognition");
+  hideShowAchievements(specialRecognition.checked);
 });
+
+const handleSpecialRecognition = (specialRecognitionEvent) => {
+  hideShowAchievements(specialRecognitionEvent.target.checked);
+};
 
 const submitForm = (edit) => {
   const errorMessageSpan = document.getElementById("errorMessage");
   const nameValue = uploadForm.elements.name.value;
   const inductionYear = uploadForm.elements.inductionYear.value;
+  const specialRecognition = uploadForm.elements.specialRecognition.value;
   const startYear = uploadForm.elements.startYear.value;
   const endYear = uploadForm.elements.endYear.value;
   const imageFileCount = uploadForm.elements.imageFile?.files?.length;
@@ -38,7 +58,7 @@ const submitForm = (edit) => {
   });
 
   const sportNames = document.querySelectorAll("input[name='sportName']") || [];
-  if (sportNames.length < 1) {
+  if (specialRecognition !== "on" && sportNames.length < 1) {
     errorMessage = `Must specify at least one sport`;
   }
 
