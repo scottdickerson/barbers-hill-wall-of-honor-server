@@ -37,21 +37,22 @@ body
             width: 1000px;\
         ')  
             h2 Sports
-            each sport, index in sports
-                div(id="new-row-sport-" + (index + 1) style='\
-                    display: flex;\
-                    flex-flow: column;\
-                    gap: 1rem;\
-                    white-space: nowrap;\
-                    width: 800px;\
-                ')
-                    h3 Sport #{index + 1}
-                    label() Sport #{index + 1} name
-                    input(type="text" data-sport name="sportName" value=sport.name)
-                    label() Sport #{index + 1} description
-                    textarea(name="sportDescription" rows="5" columns="30" style="width:800px") #{sport.description}
-                    button(style="width: 200px" onclick="removeRow('sport', " + (index + 1) + ")" type="button") Remove Sport #{index + 1}
-                    hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
+            if (!specialRecognition)
+                each sport, index in sports
+                    div(id="new-row-sport-" + (index + 1) style='\
+                        display: flex;\
+                        flex-flow: column;\
+                        gap: 1rem;\
+                        white-space: nowrap;\
+                        width: 800px;\
+                    ')
+                        h3 Sport #{index + 1}
+                        label() Sport #{index + 1} name
+                        input(type="text" data-sport name="sportName" value=sport.name)
+                        label() Sport #{index + 1} description
+                        textarea(name="sportDescription" rows="5" columns="30" style="width:800px") #{sport.description}
+                        button(style="width: 200px" onclick="removeRow('sport', " + (index + 1) + ")" type="button") Remove Sport #{index + 1}
+                        hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
             button(onclick="addRow('sport')" type="button" style="width: 100px;\
                 background-color:blue;\
                 color:white;\

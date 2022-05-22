@@ -3,15 +3,27 @@ let sportSection;
 let imagesSection;
 let achievements;
 let specialRecognition;
+let startYear;
+let startYearLabel;
+let endYear;
+let endYearLabel;
 
 const MAX_FILE_SIZE_IN_MB = 3;
 
 const hideShowAchievements = (checked) => {
   if (checked) {
     achievements.style.display = "block";
+    startYear.style.display = "none";
+    startYearLabel.style.display = "none";
+    endYear.style.display = "none";
+    endYearLabel.style.display = "none";
     sportSection.style.display = "none";
   } else {
     achievements.style.display = "none";
+    startYear.style.display = "block";
+    startYearLabel.style.display = "block";
+    endYear.style.display = "block";
+    endYearLabel.style.display = "block";
     sportSection.style.display = "flex";
   }
 };
@@ -21,6 +33,10 @@ document.addEventListener("DOMContentLoaded", () => {
   imagesSection = document.getElementById("images");
   sportSection = document.getElementById("sports");
   achievements = document.getElementById("achievements");
+  startYear = document.getElementById("startYear");
+  endYear = document.getElementById("endYear");
+  startYearLabel = document.getElementById("startYearLabel");
+  endYearLabel = document.getElementById("endYearLabel");
   specialRecognition = document.getElementById("specialRecognition");
   if (specialRecognition) {
     hideShowAchievements(specialRecognition.checked);
@@ -44,8 +60,7 @@ const submitForm = (edit, event) => {
   if (
     nameValue === "" ||
     inductionYear === "" ||
-    startYear === "" ||
-    endYear === "" ||
+    (specialRecognition && (startYear === "" || endYear === "")) ||
     (!edit && imageFileCount === 0)
   ) {
     errorMessage = "All form elements are required";

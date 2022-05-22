@@ -117,11 +117,15 @@ export const parseForm = async (req: Request, res: Response) => {
       inductionYear: parseInt(params.inductionYear as string, 10),
       inMemoriam: params.inMemoriam === "on",
       specialRecognition: isSpecialRecognition,
-      startYear: parseInt(params.startYear as string, 10),
-      endYear: parseInt(params.endYear as string, 10),
       ...(isSpecialRecognition ? { achievements: params.achievements } : {}),
       imageFiles,
-      ...(!isSpecialRecognition ? { sports } : {}),
+      ...(!isSpecialRecognition
+        ? {
+            sports,
+            startYear: parseInt(params.startYear as string, 10),
+            endYear: parseInt(params.endYear as string, 10),
+          }
+        : {}),
     };
 
     try {

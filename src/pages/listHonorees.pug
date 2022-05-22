@@ -37,8 +37,9 @@ body
                 p Special Recognition: #{honoree.specialRecognition}
                 p In memoriam: #{honoree.inMemoriam}
                 
-                p Start year: #{honoree.startYear}
-                p End year: #{honoree.endYear}
+                if (!honoree.specialRecognition) 
+                    p Start year: #{honoree.startYear}
+                    p End year: #{honoree.endYear}
                 if (honoree.specialRecognition)
                     p Achievements: #{honoree.achievements}
                 else
@@ -48,13 +49,14 @@ body
                         p Sport name: #{sport.name}
                         p Sport description: #{sport.description}
                         hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
-                h2 Images
-                each imageFile, index in honoree.imageFiles
-                    h3 Image #{index + 1}
-                    p Name: #{imageFile.name}
-                    p Description: #{imageFile.description}
-                    img(src="/api/"+imageFile.name style="width:700px;") 
-                    hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
+                if (honoree.imageFiles.length > 0) 
+                    h2 Images
+                    each imageFile, index in honoree.imageFiles
+                        h3 Image #{index + 1}
+                        p Name: #{imageFile.name}
+                        p Description: #{imageFile.description}
+                        img(src="/api/"+imageFile.name style="width:700px;") 
+                        hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
            
         hr(style='\
         width: 100%;\
