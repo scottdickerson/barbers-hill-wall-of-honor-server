@@ -32,7 +32,7 @@ npx playwright test --headed --project=chromium --workers=1 --debug
 
 ```~~~bash
 heroku login
-heroku git:remote -a barbers-hill-woc-server
+heroku git:remote -a barbers-hill-honor-server
 npm run deploy
 heroku config:set MONGO_HOSTNAME=cluster0.umj4z.mongodb.net
 heroku config:set MONGO_USER=admin
@@ -42,7 +42,7 @@ heroku config:set ENVIRONMENT=heroku
 ```
 
 Open a browser to this URL for testing
-https://barbers-hill-woc-server.herokuapp.com/
+<https://barbers-hill-honor-server.herokuapp.com/>
 
 ## Bring the remote database locally for actual production performance testing
 

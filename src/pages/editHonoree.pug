@@ -3,7 +3,7 @@ head
 body
     h1 Edit Honoree
     div(style='width: 300px; padding: 1rem 0rem; display: flex; justify-content: space-between;')
-        button#submitButton(onclick="submitForm(true)" style=`\
+        button#submitButton(onclick="submitForm(true,event)" style=`\
         background-color:blue;\
         color:white;\
         `) Save changes
@@ -12,7 +12,6 @@ body
     display: flex;\
     flex-flow: column;\
     justify-content: space-between;\
-    height: 300px;\
     width: 300px;\
     ')
         label#nameLabel Name
@@ -20,13 +19,16 @@ body
         label#inductionYearLabel Induction year
         input#inductionYear(aria-labelledby='inductionYearLabel' type='number' name='inductionYear' value=inductionYear)
         label#specialRecognitionLabel Special recognition
-        input#specialRecognition(aria-labelledby='specialRecognitionLabel' type='checkbox' name='specialRecognition', checked=!!specialRecognition)
+        input#specialRecognition(aria-labelledby='specialRecognitionLabel' type='checkbox' name='specialRecognition', checked=!!specialRecognition  onclick='handleSpecialRecognition(event)')
         label#inMemoriamLabel In memoriam
         input#inMemoriam(aria-labelledby='inMemoriamLabel' type='checkbox' name='inMemoriam' checked=!!inMemoriam)
         label#startYearLabel Start year
         input#startYear(aria-labelledby='startYearLabel' type='number' name='startYear' value=startYear)
         label#endYearLabel End year
-        input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear' value=endYear)    
+        input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear' value=endYear)   
+        div#achievements(style='display:flex; flex-flow: column;')
+            label#achievementsLabel Achievements
+            textarea(name="achievements" rows="5" columns="30" style="width:800px;") #{achievements}
         div#sports(style='\
             display: flex;\
             flex-flow: column;\
@@ -35,25 +37,26 @@ body
             width: 1000px;\
         ')  
             h2 Sports
-            each sport, index in sports
-                div(id="new-row-sport-" + (index + 1) style='\
-                    display: flex;\
-                    flex-flow: column;\
-                    gap: 1rem;\
-                    white-space: nowrap;\
-                    width: 800px;\
-                ')
-                    h3 Sport #{index + 1}
-                    label() Sport #{index + 1} name
-                    input(type="text" data-sport name="sportName" value=sport.name)
-                    label() Sport #{index + 1} description
-                    textarea(name="sportDescription" rows="5" columns="30" style="width:800px") #{sport.description}
-                    button(style="width: 200px" onclick="removeRow('sport', " + (index + 1) + ")" type="button") Remove Sport #{index + 1}
-                    hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
-                button(onclick="addRow('sport')" type="button" style="width: 100px;\
-                    background-color:blue;\
-                    color:white;\
-                ") Add sport
+            if (!specialRecognition)
+                each sport, index in sports
+                    div(id="new-row-sport-" + (index + 1) style='\
+                        display: flex;\
+                        flex-flow: column;\
+                        gap: 1rem;\
+                        white-space: nowrap;\
+                        width: 800px;\
+                    ')
+                        h3 Sport #{index + 1}
+                        label() Sport #{index + 1} name
+                        input(type="text" data-sport name="sportName" value=sport.name)
+                        label() Sport #{index + 1} description
+                        textarea(name="sportDescription" rows="5" columns="30" style="width:800px") #{sport.description}
+                        button(style="width: 200px" onclick="removeRow('sport', " + (index + 1) + ")" type="button") Remove Sport #{index + 1}
+                        hr(style="width: 600px; margin-left: 0px; height:3px; background-color: black; margin-top: 2rem;")
+            button(onclick="addRow('sport')" type="button" style="width: 100px;\
+                background-color:blue;\
+                color:white;\
+            ") Add sport
 
         hr(style='width: 800px;')
         div#images()  
@@ -80,7 +83,7 @@ body
                     ") Add image
         #errorMessage(style='color: red')
         hr(style='width: 800px; height: 20px;')
-        button#submitButton(onclick="submitForm(true)" style=`\
+        button#submitButton(onclick="submitForm(true,event)" style=`\
         background-color:blue;\
         color:white;\
         `) Save changes

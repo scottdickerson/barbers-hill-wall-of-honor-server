@@ -14,13 +14,16 @@ body
         label#inductionYearLabel Induction year
         input#inductionYear(aria-labelledby='inductionYearLabel' type='number' name='inductionYear')
         label#specialRecognitionLabel Special recognition
-        input#specialRecognition(aria-labelledby='specialRecognitionLabel' type='checkbox' name='specialRecognition')
+        input#specialRecognition(aria-labelledby='specialRecognitionLabel' type='checkbox' name='specialRecognition' onclick='handleSpecialRecognition(event)')
         label#inMemoriamLabel In memoriam
         input#inMemoriam(aria-labelledby='inMemoriamLabel' type='checkbox' name='inMemoriam')
         label#startYearLabel Start year
         input#startYear(aria-labelledby='startYearLabel' type='number' name='startYear')
         label#endYearLabel End year
-        input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear')    
+        input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear')  
+        div#achievements(style='flex-flow: column; display:none;')
+            label#achievementsLabel Achievements
+            textarea(name="achievements" rows="5" columns="30" style="width:800px;") #{achievements}
         div#sports(style='\
             display: flex;\
             flex-flow: column;\
@@ -43,5 +46,7 @@ body
         #errorMessage(style='color: red')
     div
     h2 Actions
-    button#submitButton(onclick="submitForm()") Upload
+    button#submitButton(onclick="submitForm(false,event)" style="background-color:blue;\
+        color:white;\
+    ") Upload
     button#list(onclick="listHonorees()") List existing honorees
