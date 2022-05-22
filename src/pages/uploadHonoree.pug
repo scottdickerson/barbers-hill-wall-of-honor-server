@@ -29,7 +29,7 @@ body
             width: 1000px;\
         ')  
             h2 Sports
-            button(onclick="addRow('sport')" type="button" style="width: 100px") Add sport
+            button(onclick="addRow('sport')" id="addSport" type="button" style="width: 100px") Add sport
         hr(style='width: 800px;')
         div#images(style='\
             display: flex;\
@@ -39,7 +39,7 @@ body
             width: 800px;\
         ')  
             h2 Images
-            button(onclick="addRow('image')" type="button" style="width: 100px") Add image
+            button(onclick="addRow('image')" id="addImage" type="button" style="width: 100px") Add image
         #errorMessage(style='color: red')
     div
     h2 Actions

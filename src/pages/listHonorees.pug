@@ -5,7 +5,7 @@ body
     if !heroku
         button#add(onclick="addHonoree()") Add new honoree
     each honoree in honorees 
-        div(style='\
+        div(id=honoree.name style='\
         display: flex;\
         flex-flow: row;\
         align-items: center;\
@@ -27,15 +27,15 @@ body
                     marginLeft: 1rem;\
                     ') Edit Honoree
                     if !heroku
-                        button(onclick="deleteHonoree('"+honoree._id+"')" style='\
+                        button(id="deleteButton" onclick="deleteHonoree('"+honoree._id+"')" style='\
                         height: 20px;\
                         width: 150px;\
                         marginLeft: 1rem;\
                         ') Delete Honoree
                 p Induction year: #{honoree.inductionYear}
                 
-                p Special Recognition: #{honoree.specialRecognition}
-                p In memoriam: #{honoree.inMemoriam}
+                p(id="specialRecognition") Special Recognition: #{honoree.specialRecognition}
+                p(id="inMemoriam") In memoriam: #{honoree.inMemoriam}
                 
                 p Start year: #{honoree.startYear}
                 p End year: #{honoree.endYear}
