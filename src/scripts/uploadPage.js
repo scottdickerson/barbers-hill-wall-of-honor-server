@@ -22,18 +22,21 @@ document.addEventListener("DOMContentLoaded", () => {
   sportSection = document.getElementById("sports");
   achievements = document.getElementById("achievements");
   specialRecognition = document.getElementById("specialRecognition");
-  hideShowAchievements(specialRecognition.checked);
+  if (specialRecognition) {
+    hideShowAchievements(specialRecognition.checked);
+  }
 });
 
 const handleSpecialRecognition = (specialRecognitionEvent) => {
   hideShowAchievements(specialRecognitionEvent.target.checked);
 };
 
-const submitForm = (edit) => {
+const submitForm = (edit, event) => {
   const errorMessageSpan = document.getElementById("errorMessage");
   const nameValue = uploadForm.elements.name.value;
   const inductionYear = uploadForm.elements.inductionYear.value;
-  const specialRecognition = uploadForm.elements.specialRecognition.value;
+  const specialRecognition = uploadForm.elements.specialRecognition.checked;
+  const achievementsValue = uploadForm.elements.achievements.value;
   const startYear = uploadForm.elements.startYear.value;
   const endYear = uploadForm.elements.endYear.value;
   const imageFileCount = uploadForm.elements.imageFile?.files?.length;
@@ -58,8 +61,11 @@ const submitForm = (edit) => {
   });
 
   const sportNames = document.querySelectorAll("input[name='sportName']") || [];
-  if (specialRecognition !== "on" && sportNames.length < 1) {
+  if (!specialRecognition && sportNames.length < 1) {
     errorMessage = `Must specify at least one sport`;
+  }
+  if (specialRecognition && !achievementsValue) {
+    errorMessage = `Must specify achievements`;
   }
 
   console.log(nameValue);
@@ -70,6 +76,7 @@ const submitForm = (edit) => {
   if (!errorMessage) {
     uploadForm.submit();
   } else {
+    event.preventDefault();
     errorMessageSpan.innerHTML = errorMessage;
   }
 };

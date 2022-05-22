@@ -119,9 +119,9 @@ export const parseForm = async (req: Request, res: Response) => {
       specialRecognition: isSpecialRecognition,
       startYear: parseInt(params.startYear as string, 10),
       endYear: parseInt(params.endYear as string, 10),
-      achievements: params.achievements,
+      ...(isSpecialRecognition ? { achievements: params.achievements } : {}),
       imageFiles,
-      sports,
+      ...(!isSpecialRecognition ? { sports } : {}),
     };
 
     try {
