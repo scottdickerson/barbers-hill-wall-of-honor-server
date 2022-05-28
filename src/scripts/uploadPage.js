@@ -60,7 +60,7 @@ const submitForm = (edit, event) => {
   if (
     nameValue === "" ||
     inductionYear === "" ||
-    (specialRecognition && (startYear === "" || endYear === "")) ||
+    (!specialRecognition && (startYear === "" || endYear === "")) ||
     (!edit && imageFileCount === 0)
   ) {
     errorMessage = "All form elements are required";

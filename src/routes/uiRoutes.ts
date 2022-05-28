@@ -3,6 +3,7 @@ const router = express.Router();
 import pug from "pug";
 import path from "path";
 import { findHonoreeMetadataInMongo, findHonorees } from "../mongoUtils";
+import { IHonoree } from "../types";
 
 export const pugPagesHome = path.join(__dirname, "..", "..", "src", "pages");
 
@@ -46,7 +47,10 @@ router.get("/mainNavigation.html", (req: Request, res: Response) => {
 
 router.get("/listHonorees.html", async (req: Request, res: Response) => {
   try {
-    const honorees = await findHonorees();
+    const honorees = (await findHonorees()).sort(
+      (honoree1: IHonoree, honoree2: IHonoree) =>
+        honoree2.inductionYear - honoree1.inductionYear
+    );
     console.log("honorees", honorees);
     res.send(
       pug.renderFile(path.join(pugPagesHome, "listHonorees.pug"), {

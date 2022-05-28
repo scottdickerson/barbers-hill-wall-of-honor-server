@@ -3,8 +3,8 @@ head
 body
     h1 Current Honorees
     if !heroku
-        button#add(onclick="addHonoree()") Add new honoree
-    each honoree in honorees 
+        button#add(onclick="addHonoree()" style="background-color: blue; color: white; margin-bottom:2rem;") Add new honoree
+    each honoree, index in honorees 
         div(id=honoree.name style='\
         display: flex;\
         flex-flow: row;\
@@ -15,7 +15,8 @@ body
             flex-flow: column;\
             align-items: flex-start;\
             ')
-                img(src="/images/honoree.png" style="background-color: black; height:200px;") 
+                if (index != 0) 
+                    hr(style="background-color: gray; height:20px; width:100vw;") 
                 h2 Name: #{honoree.name}
                  div(style='\
                     display: flex;\
@@ -64,5 +65,5 @@ body
         background-color: black;\
         margin-Top: 1rem;\
         ')
-    
+    button#add(onclick="addHonoree()" style="background-color: blue; color: white; margin-top:2rem;") Add new honoree
 
