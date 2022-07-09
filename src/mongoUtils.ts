@@ -8,11 +8,6 @@ export async function connectToDB() {
   await client.connect();
   const database = client.db(databaseName);
   honoreesDatabaseCollection = database.collection("wall-of-honor");
-  console.log(
-    `connected to the barbers hill mongo database ${databaseName} here: ${
-      process.env.MONGO_HOSTNAME || "mongodb://127.0.0.1:27017"
-    }`
-  );
   imagesBucket = new GridFSBucket(database, { bucketName: IMAGES_BUCKET_NAME });
   imagesDatabaseCollection = database.collection(`${IMAGES_BUCKET_NAME}.files`);
 }
@@ -23,6 +18,12 @@ export const uri = process.env.MONGO_HOSTNAME
   : `mongodb://127.0.0.1:${
       process.env.MONGO_PORT ? process.env.MONGO_PORT : "27017"
     }/`;
+
+    console.log(
+      `connected to the barbers hill mongo database ${databaseName} here: ${
+        uri
+      }`
+    );
 
 const client = new MongoClient(uri);
 let honoreesDatabaseCollection: mongoDB.Collection;
