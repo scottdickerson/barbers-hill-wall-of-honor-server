@@ -55,6 +55,7 @@ const submitForm = (edit, event) => {
   const achievementsValue = uploadForm.elements.achievements.value;
   const startYear = uploadForm.elements.startYear.value;
   const endYear = uploadForm.elements.endYear.value;
+  const defaultImageFile = uploadForm.elements.defaultImageFile.value;
   const imageFileCount = uploadForm.elements.imageFile?.files?.length;
   let errorMessage;
   if (
@@ -65,15 +66,32 @@ const submitForm = (edit, event) => {
   ) {
     errorMessage = "All form elements are required";
   }
+  let defaultImageFileMatches = false;
   const imageFileInputs =
     document.querySelectorAll("input[name='imageFile']") || [];
   imageFileInputs.forEach((fileUploader) => {
     const fileSize = fileUploader.files[0]?.size;
+    // Ensure that the default image files matches an uploaded one
+    if (fileUploader.files[0].name === defaultImageFile ) {
+      defaultImageFileMatches =true
+    } 
     console.log("File size", fileSize);
     if (fileSize > MAX_FILE_SIZE_IN_MB * 1024 * 1024) {
       errorMessage = `File cannot be larger than ${MAX_FILE_SIZE_IN_MB}MB`;
     }
   });
+
+  const existingImages =
+    document.querySelectorAll("input[name='imageName']") || [];
+  existingImages.forEach((existingImage)=> {
+    if (existingImage.value === defaultImageFile) {
+      defaultImageFileMatches = true;
+    }
+  })
+  if (!defaultImageFileMatches && defaultImageFile) {
+    errorMessage="Default image file name does not match an image file name"
+  }
+
 
   const sportNames = document.querySelectorAll("input[name='sportName']") || [];
   if (!specialRecognition && sportNames.length < 1) {

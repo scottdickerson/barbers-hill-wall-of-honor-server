@@ -56,6 +56,8 @@ body
                         h3 Image #{index + 1}
                         p Name: #{imageFile.name}
                         p Description: #{imageFile.description}
+                        if (honoree.defaultImageFile === imageFile.name || !honoree.defaultImageFile && index===0) 
+                            <p><b>This is the Default Image</b></p>
                         img(src="/api/"+imageFile.name style="width:700px;") 
                         hr(style="width: 600px; margin-left: 0px;  height:3px; background-color: black; margin-top: 2rem;")
            

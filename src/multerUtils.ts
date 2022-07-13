@@ -126,6 +126,7 @@ export const parseForm = async (req: Request, res: Response) => {
             endYear: parseInt(params.endYear as string, 10),
           }
         : {}),
+      defaultImageFile: params.defaultImageFile
     };
 
     try {

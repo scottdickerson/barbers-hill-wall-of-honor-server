@@ -42,6 +42,8 @@ body
             width: 800px;\
         ')  
             h2 Images
+            label#defaultImageFileLabel Default Image
+            input#defaultImageFile(form='uploadForm' aria-labelledby='defaultImageFileLabel' name='defaultImageFile')  
             button(onclick="addRow('image')" id="addImage" type="button" style="width: 100px") Add image
         #errorMessage(style='color: red')
     div

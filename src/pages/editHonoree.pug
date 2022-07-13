@@ -26,6 +26,7 @@ body
         input#startYear(aria-labelledby='startYearLabel' type='number' name='startYear' value=startYear)
         label#endYearLabel End year
         input#endYear(aria-labelledby='endYearLabel' type='number' name='endYear' value=endYear)   
+       
         div#achievements(style='display:flex; flex-flow: column;')
             label#achievementsLabel Achievements
             textarea(name="achievements" rows="5" columns="30" style="width:800px;") #{achievements}
@@ -61,6 +62,9 @@ body
         hr(style='width: 800px;')
         div#images()  
             h2 Images
+            label#defaultImageFileLabel Default image
+            input#defaultImageFile(aria-labelledby='defaultImageFileLabel' name='defaultImageFile' value=defaultImageFile)   
+            
             each imageFile, index in imageFiles
                 div(id="new-row-image-" + (index + 1) data-image style='\
                     display: flex;\
