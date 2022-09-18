@@ -113,7 +113,7 @@ export const parseForm = async (req: Request, res: Response) => {
     const honoreeId = req.params?.id;
     const newHonoree: IHonoree = {
       id: new ObjectId(),
-      name: params.name as string,
+      name: params.name.trim() as string,
       inductionYear: parseInt(params.inductionYear as string, 10),
       inMemoriam: params.inMemoriam === "on",
       specialRecognition: isSpecialRecognition,
